@@ -10,6 +10,8 @@ public class AppRunner {
     private final UniversalArray<Product> products = new UniversalArrayImpl<>();
 
     private final CoinAcceptor coinAcceptor;
+    private final Card card;
+    private final Wallet wallet;
 
     private static boolean isExit = false;
 
@@ -22,7 +24,9 @@ public class AppRunner {
                 new Mars(ActionLetter.F, 80),
                 new Pistachios(ActionLetter.G, 130)
         });
-        coinAcceptor = new CoinAcceptor(100);
+        coinAcceptor = new CoinAcceptor(0);
+        card = new Card(1500);
+        wallet = new Wallet(250);
     }
 
     public static void run() {
@@ -36,7 +40,7 @@ public class AppRunner {
         print("В автомате доступны:");
         showProducts(products);
 
-        print("Монет на сумму: " + coinAcceptor.getAmount());
+        print("В терминале: " + coinAcceptor.getAmount()+ " руб");
 
         UniversalArray<Product> allowProducts = new UniversalArrayImpl<>();
         allowProducts.addAll(getAllowedProducts().toArray());
@@ -59,11 +63,32 @@ public class AppRunner {
         showActions(products);
         print(" h - Выйти");
         String action = fromConsole().substring(0, 1);
+        if ("a".equalsIgnoreCase(action)){
+            print("a - Пополнить картой");
+            print(" b - Пополнить наличкой");
+            String action1 = fromConsole().substring(0,1);
+        }
         if ("a".equalsIgnoreCase(action)) {
-            coinAcceptor.setAmount(coinAcceptor.getAmount() + 10);
-            print("Вы пополнили баланс на 10");
+            Scanner scanner = new Scanner(System.in);
+            print("Введите Пин-Код: ");
+            String str = String.valueOf(scanner.nextDouble());
+            print("Введите код: ");
+            String str2 = String.valueOf(scanner.nextDouble());
+            print("Карта: \nДоступно: " + card + " руб");
+            double sum = scanner.nextDouble();
+            coinAcceptor.setAmount(coinAcceptor.getAmount() + sum);
+            print("Вы пополнили баланс на" + sum);
             return;
         }
+        if ("b".equalsIgnoreCase(action)) {
+            Scanner scanner = new Scanner(System.in);
+            print("В кошельке: \n" + wallet + " руб");
+            double sum = scanner.nextDouble();
+            coinAcceptor.setAmount(coinAcceptor.getAmount() + sum);
+            print("Вы пополнили баланс на" + sum);
+            return;
+        }
+
         try {
             for (int i = 0; i < products.size(); i++) {
                 if (products.get(i).getActionLetter().equals(ActionLetter.valueOf(action.toUpperCase()))) {
