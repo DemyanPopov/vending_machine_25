@@ -1,17 +1,19 @@
 package model;
 
 public class CoinAcceptor {
-    private int amount;
+    private double amount;
 
     public CoinAcceptor(int amount) {
         this.amount = amount;
     }
 
-    public int getAmount() {
+
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
+
 }
